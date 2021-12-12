@@ -62,14 +62,15 @@ class User {
 
   @override
   String toString() {
-    return _username +
-        "," +
+    return "username: " +
+        _username +
+        ", password: " +
         _password +
-        "," +
+        ", firstname:" +
         _firstname +
-        "," +
+        ", lastname: " +
         _lastname +
-        "," +
+        ", gender: " +
         _gender;
   }
 }

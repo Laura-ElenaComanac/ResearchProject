@@ -1,8 +1,11 @@
+import 'package:f_logs/model/flog/flog.dart';
 import 'package:flutter/material.dart';
+import 'package:projyproject/repository/database.dart';
 import 'package:projyproject/model/user.dart';
 import 'package:projyproject/repository/fake_repo.dart';
 import 'package:projyproject/shared/menu_bottom.dart';
 import 'package:projyproject/shared/menu_drawer.dart';
+import 'package:projyproject/view_model/bloc.dart';
 import 'package:projyproject/view_model/user_list_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +17,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  Bloc get bloc => Provider.of<Bloc>(context, listen: false);
+
   final TextEditingController txtUsername = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
   final TextEditingController txtFirstName = TextEditingController();
@@ -92,16 +97,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 );
               } else {
-                User user = User(
-                    id: (FakeRepo.getUsers().length + 1).toString(),
+                final user = LocalUsersCompanion.insert(
                     username: txtUsername.text,
                     password: txtPassword.text,
                     firstname: txtFirstName.text,
                     lastname: txtLastName.text,
                     gender: txtGender.text);
-                Provider.of<UserListViewModel>(context, listen: false)
-                    .addUser(user);
-                Navigator.pop(context);
+
+                try {
+                  bloc.addEntry(user);
+                  Navigator.pop(context);
+                } on Failure catch (f) {
+                  FLog.error(
+                      className: "RegisterScreen",
+                      methodName: "addEntry",
+                      text: f.message);
+
+                  Widget okButton = TextButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      return Navigator.of(context, rootNavigator: true).pop();
+                    },
+                  );
+                  AlertDialog alert = AlertDialog(
+                    title: Text("Warning!"),
+                    content: Text(f.message),
+                    actions: [
+                      okButton,
+                    ],
+                  );
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                  );
+                }
               }
             },
             child: const Text(

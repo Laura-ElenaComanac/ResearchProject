@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projyproject/repository/database.dart';
 import 'package:projyproject/model/user.dart';
+import 'package:projyproject/view_model/bloc.dart';
 import 'package:projyproject/view_model/user_list_view_model.dart';
 import 'package:provider/provider.dart';
 
 class UsersListWidget extends StatefulWidget {
-  final List<User> users;
+  //final UserEntry entry;
+  final List<UserEntry> users;
   final Function deleteFunction;
   const UsersListWidget(this.users, this.deleteFunction, {Key? key})
       : super(key: key);
@@ -14,13 +17,30 @@ class UsersListWidget extends StatefulWidget {
 }
 
 class _UsersListWidgetState extends State<UsersListWidget> {
+  Bloc get bloc => Provider.of<Bloc>(context, listen: false);
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         itemCount: widget.users.length,
         itemBuilder: (context, index) {
-          final user = widget.users[index];
-          final struser = widget.users[index].toString();
+          final user = UserEntry(
+              id: widget.users[index].id,
+              username: widget.users[index].username,
+              password: widget.users[index].password,
+              firstname: widget.users[index].firstname,
+              lastname: widget.users[index].lastname,
+              gender: widget.users[index].gender);
+
+          final myuser = User(
+              id: widget.users[index].id.toString(),
+              username: widget.users[index].username,
+              password: widget.users[index].password,
+              firstname: widget.users[index].firstname,
+              lastname: widget.users[index].lastname,
+              gender: widget.users[index].gender);
+
+          final struser = myuser.toString();
 
           return Dismissible(
             confirmDismiss: (DismissDirection direction) async {
@@ -53,8 +73,7 @@ class _UsersListWidgetState extends State<UsersListWidget> {
               return Column(children: [
                 ListTile(
                   onTap: () {
-                    Provider.of<UserListViewModel>(context, listen: false)
-                        .setUser(user);
+                    bloc.setUser(user);
                   },
                   title: Text(struser),
                 ),

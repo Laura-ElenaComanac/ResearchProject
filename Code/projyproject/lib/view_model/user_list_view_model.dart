@@ -1,36 +1,43 @@
-import 'package:flutter/cupertino.dart';
-import 'package:projyproject/model/user.dart';
-import 'package:projyproject/repository/fake_repo.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:projyproject/model/database.dart';
+// import 'package:projyproject/model/user.dart';
+// import 'package:projyproject/repository/fake_repo.dart';
+// import 'package:projyproject/repository/reository.dart';
+// import 'package:projyproject/repository/reository.dart';
 
-class UserListViewModel with ChangeNotifier {
-  final List<User> _users = FakeRepo.getUsers();
-  User? _user;
+// class UserListViewModel with ChangeNotifier {
+//   final Future<List<UserEntry>> _users = Repository.getEntries();
 
-  User? get user {
-    return _user;
-  }
+//   LocalUsersCompanion? _user;
 
-  void updateUser(User user) {
-    FakeRepo.update(user);
-    notifyListeners();
-  }
+//   LocalUsersCompanion? get user {
+//     return _user;
+//   }
 
-  void setUser(User user) {
-    _user = user;
-    notifyListeners();
-  }
+//   void updateUser(LocalUsersCompanion user) {
+//     //FakeRepo.update(user);
+//     Repository.updateEntry(user);
+//     notifyListeners();
+//   }
 
-  List<User> get users {
-    return _users;
-  }
+//   void setUser(LocalUsersCompanion user) {
+//     _user = user;
+//     notifyListeners();
+//   }
 
-  void addUser(User user) {
-    FakeRepo.save(user);
-    notifyListeners();
-  }
+//   Future<List<UserEntry>> get users {
+//     return _users;
+//   }
 
-  void deleteUser(String index) {
-    FakeRepo.delete(index);
-    notifyListeners();
-  }
-}
+//   void addUser(LocalUsersCompanion user) {
+//     //FakeRepo.save(user);
+//     Repository.addEntry(user);
+//     notifyListeners();
+//   }
+
+//   void deleteUser(UserEntry userEntry) {
+//     //FakeRepo.delete(index);
+//     Repository.deleteEntry(userEntry);
+//     notifyListeners();
+//   }
+// }
